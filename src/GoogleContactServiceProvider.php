@@ -17,6 +17,7 @@ class GoogleContactServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/google-contact.php', 'google-contact');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         $this->app->bind(GoogleContact::class, function () {
             $config = config('google-contact');
