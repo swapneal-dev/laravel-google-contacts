@@ -1,0 +1,28 @@
+{
+    "name": "swapneal-dev/laravel-google-contacts",
+    "description": "fetch google contact in your project",
+    "require": {
+        "google/apiclient": "^2.2",
+        "php": "^8.0",
+        "illuminate/support": "^8.0|^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "SwapnealDev\\GoogleContact\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Swapnil Sargar",
+            "email": "swapnilsargar03@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SwapnealDev\\GoogleContact\\GoogleContactServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev"
+}
