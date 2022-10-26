@@ -1,11 +1,12 @@
 
-# fetch contacts from Google Contacts Using Google People API
+# Fetch contacts from Google Contacts Using Google People API
 
 # Installation
 
-You can install the package via composer:
-
-composer require spatie/laravel-google-calendar
+Install using composer<br>
+```bash
+composer require swapneal-dev/laravel-google-contacts
+```
 You must publish the configuration with this command:
 
 ```
