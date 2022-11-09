@@ -19,7 +19,7 @@ php artisan vendor:publish --provider="SwapnealDev\GoogleContact\GoogleContactSe
 4. add calendar id to `google_calender_id` column in users table.
 5. add trait to user model `SwapnealDev\GoogleContact\traits\HasGoogleToken`
 
-# I have created a example project for google contacts to know implementation of this package.
+# I have created an example project for google contacts to know implementation of this package.
 https://github.com/swapneal-dev/google-calender-and-contacts
 
 Now you are good to go.
