@@ -19,4 +19,31 @@ class GoogleContact
         return $this
             ->contactService->people_connections->listPeopleConnections('people/me',$parameters);
     }
+
+    public function insert($person, $optParams = [])
+    {
+        return $this->contactService->people->createContact($person, $optParams);
+    }
+
+
+    public function updateContact($resourceName, $person): PeopleService\Person
+    {
+        $contact = static::get($resourceName);
+//        dd($contact);
+        $person->etag = $contact->etag;
+        $metaData = new PeopleService\PersonMetadata();
+        $metaData->setSources($contact->metadata->getSources());
+        $person->metadata = $metaData;
+        return $this->contactService->people->updateContact($resourceName, $person, array('updatePersonFields' => 'names,emailAddresses,phoneNumbers'));
+    }
+
+    public function get($id): PeopleService\Person
+    {
+        return $this->contactService->people->get($id, array('personFields' => 'names,emailAddresses,phoneNumbers,metadata'));
+    }
+
+    public function deleteContact($resourceName): PeopleService\PeopleEmpty
+    {
+        return $this->contactService->people->deleteContact($resourceName);
+    }
 }

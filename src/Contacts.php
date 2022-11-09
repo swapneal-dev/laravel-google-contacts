@@ -7,6 +7,9 @@ use Google\Service\PeopleService;
 use Illuminate\Support\Collection;
 use SwapnealDev\GoogleContact\Exceptions\InvalidConfiguration;
 
+/**
+ *
+ */
 class Contacts{
     /**
      * @throws InvalidConfiguration
@@ -31,6 +34,84 @@ class Contacts{
         return collect($googleConnections)->sortBy(function ($person, $index)  {
                 return $person->names[0]->displayName;
             })->values();
+    }
+
+    public static function create(array $fields): PeopleService\Person
+    {
+        $person = new PeopleService\Person();
+
+        $name = new PeopleService\Name();
+        $name->setFamilyName($fields['last_name']);
+        $name->setGivenName($fields['first_name']);
+        $name->setMiddleName($fields['middle_name']??'');
+
+        $person->setNames([$name]);
+
+        $phoneNumber = new PeopleService\PhoneNumber();
+        $phoneNumber->setType('mobile');
+        $phoneNumber->setValue($fields['mobile']);
+
+        $phoneNumbers[] = $phoneNumber;
+
+        if(isset($fields['alternate_mobile'])){
+            $alternatePhoneNumber = new PeopleService\PhoneNumber();
+            $alternatePhoneNumber->setType('work');
+            $alternatePhoneNumber->setValue($fields['alternate_mobile']);
+            $phoneNumbers[] = $alternatePhoneNumber;
+        }
+
+        $person->setPhoneNumbers($phoneNumbers);
+
+        $googleContact = static::getGoogleContacts();
+
+        return $googleContact->insert($person);
+    }
+
+    public static function update($id, array $fields): PeopleService\Person
+    {
+        $person = new PeopleService\Person();
+
+        $name = new PeopleService\Name();
+        $name->setFamilyName($fields['last_name']);
+        $name->setGivenName($fields['first_name']);
+        $name->setMiddleName($fields['middle_name']??'');
+
+        $person->setNames([$name]);
+
+        $phoneNumber = new PeopleService\PhoneNumber();
+        $phoneNumber->setType('mobile');
+        $phoneNumber->setValue($fields['mobile']);
+
+        $phoneNumbers[] = $phoneNumber;
+
+        if(isset($fields['alternate_mobile'])){
+            $alternatePhoneNumber = new PeopleService\PhoneNumber();
+            $alternatePhoneNumber->setType('work');
+            $alternatePhoneNumber->setValue($fields['alternate_mobile']);
+            $phoneNumbers[] = $alternatePhoneNumber;
+        }
+
+        $person->setPhoneNumbers($phoneNumbers);
+
+        $googleContact = static::getGoogleContacts();
+
+        return $googleContact->updateContact($id, $person);
+    }
+
+    /**
+     * @throws InvalidConfiguration
+     * @throws Exception
+     */
+    public static function delete($id): PeopleService\PeopleEmpty
+    {
+        $googleContact = static::getGoogleContacts();
+        return $googleContact->deleteContact($id);
+    }
+
+    public static function find($id): PeopleService\Person
+    {
+        $googleContact = static::getGoogleContacts();
+        return $googleContact->get($id);
     }
 
     /**
