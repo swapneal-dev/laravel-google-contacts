@@ -15,7 +15,7 @@ class GoogleContact
 
     public function listContacts(array $queryParameters = []): PeopleService\ListConnectionsResponse
     {
-        $parameters = array_merge($queryParameters, array('personFields' => 'names,emailAddresses,phoneNumbers'));
+        $parameters = array_merge($queryParameters, array('personFields' => 'names,emailAddresses,phoneNumbers,birthdays'));
         return $this
             ->contactService->people_connections->listPeopleConnections('people/me',$parameters);
     }
@@ -29,17 +29,16 @@ class GoogleContact
     public function updateContact($resourceName, $person): PeopleService\Person
     {
         $contact = static::get($resourceName);
-//        dd($contact);
         $person->etag = $contact->etag;
         $metaData = new PeopleService\PersonMetadata();
         $metaData->setSources($contact->metadata->getSources());
         $person->metadata = $metaData;
-        return $this->contactService->people->updateContact($resourceName, $person, array('updatePersonFields' => 'names,emailAddresses,phoneNumbers'));
+        return $this->contactService->people->updateContact($resourceName, $person, array('updatePersonFields' => 'names,emailAddresses,phoneNumbers,birthdays'));
     }
 
     public function get($id): PeopleService\Person
     {
-        return $this->contactService->people->get($id, array('personFields' => 'names,emailAddresses,phoneNumbers,metadata'));
+        return $this->contactService->people->get($id, array('personFields' => 'names,emailAddresses,phoneNumbers,metadata,birthdays'));
     }
 
     public function deleteContact($resourceName): PeopleService\PeopleEmpty
