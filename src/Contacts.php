@@ -10,7 +10,8 @@ use SwapnealDev\GoogleContact\Exceptions\InvalidConfiguration;
 /**
  *
  */
-class Contacts{
+class Contacts
+{
     /**
      * @throws InvalidConfiguration
      * @throws Exception
@@ -31,9 +32,9 @@ class Contacts{
             $googleConnections = array_merge($googleConnections, $googleContactList->getConnections());
         }
 
-        return collect($googleConnections)->sortBy(function ($person, $index)  {
-                return $person->names[0]->displayName;
-            })->values();
+        return collect($googleConnections)->sortBy(function ($person, $index) {
+            return $person->names[0]->displayName;
+        })->values();
     }
 
     public static function create(array $fields): PeopleService\Person
@@ -43,7 +44,7 @@ class Contacts{
         $name = new PeopleService\Name();
         $name->setFamilyName($fields['last_name']);
         $name->setGivenName($fields['first_name']);
-        $name->setMiddleName($fields['middle_name']??'');
+        $name->setMiddleName($fields['middle_name'] ?? '');
 
         $person->setNames([$name]);
 
@@ -53,7 +54,7 @@ class Contacts{
 
         $phoneNumbers[] = $phoneNumber;
 
-        if(isset($fields['alternate_mobile'])){
+        if (isset($fields['alternate_mobile'])) {
             $alternatePhoneNumber = new PeopleService\PhoneNumber();
             $alternatePhoneNumber->setType('work');
             $alternatePhoneNumber->setValue($fields['alternate_mobile']);
@@ -61,6 +62,16 @@ class Contacts{
         }
 
         $person->setPhoneNumbers($phoneNumbers);
+
+        $email = new PeopleService\EmailAddress();
+        $email->setValue($fields['email']);
+        $person->setEmailAddresses([$email]);
+
+        if (isset($fields['birthday'])) {
+            $birthday = new PeopleService\Birthday();
+            $birthday->setText($fields['birthday']);
+            $person->setBirthdays([$birthday]);
+        }
 
         $googleContact = static::getGoogleContacts();
 
@@ -74,7 +85,7 @@ class Contacts{
         $name = new PeopleService\Name();
         $name->setFamilyName($fields['last_name']);
         $name->setGivenName($fields['first_name']);
-        $name->setMiddleName($fields['middle_name']??'');
+        $name->setMiddleName($fields['middle_name'] ?? '');
 
         $person->setNames([$name]);
 
@@ -84,7 +95,7 @@ class Contacts{
 
         $phoneNumbers[] = $phoneNumber;
 
-        if(isset($fields['alternate_mobile'])){
+        if (isset($fields['alternate_mobile'])) {
             $alternatePhoneNumber = new PeopleService\PhoneNumber();
             $alternatePhoneNumber->setType('work');
             $alternatePhoneNumber->setValue($fields['alternate_mobile']);
@@ -92,6 +103,16 @@ class Contacts{
         }
 
         $person->setPhoneNumbers($phoneNumbers);
+
+        $email = new PeopleService\EmailAddress();
+        $email->setValue($fields['email']);
+        $person->setEmailAddresses([$email]);
+
+        if (isset($fields['birthday'])) {
+            $birthday = new PeopleService\Birthday();
+            $birthday->setText($fields['birthday']);
+            $person->setBirthdays([$birthday]);
+        }
 
         $googleContact = static::getGoogleContacts();
 
