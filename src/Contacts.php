@@ -33,7 +33,7 @@ class Contacts
         }
 
         return collect($googleConnections)->sortBy(function ($person, $index) {
-            return $person->names[0]->displayName;
+            return $person->names[0]->displayName ?? ' ';
         })->values();
     }
 
